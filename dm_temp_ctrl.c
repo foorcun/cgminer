@@ -46,6 +46,7 @@ static uint32_t 	g_temp_status[MAX_CHAIN_NUM];
  * Arguments:	p_cfg		temperature configs
  * Return:		none
  ******************************************************************************/
+// p_ = pointer for _ , cfg = configuration, c_ = costum_ (emin değilim)
 void dm_tempctrl_get_defcfg(c_temp_cfg *p_cfg) // c_temp_cfg = struct, *p_cfg = bu addresin işaret ettiği memorydeki  veri, işlevi= temperature için configuration/settings gibi bişi
 {
 	p_cfg->tmp_min		= -40;
@@ -57,7 +58,7 @@ void dm_tempctrl_get_defcfg(c_temp_cfg *p_cfg) // c_temp_cfg = struct, *p_cfg = 
 	p_cfg->tmp_thr_pd	= 115;
 	p_cfg->tmp_exp_time	= 2000; // 2s
 }
-
+// g_ = global_
 // işlev : The function is responsible for updating the global variable g_tmp_cfg with the values from the c_temp_cfg structure pointed to by p_cfg.
 void dm_tempctrl_set(c_temp_cfg *p_cfg)
 {
