@@ -15,10 +15,10 @@
 // iki küçüktür-büyüktür arası <  .h>, library import eder.
 
 #include <stdio.h> // printf(), scanf(), and file operations like fopen(), fclose(), etc.
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
+#include <ctype.h> // isalpha(), isdigit(), isspace(), toupper(), tolower(), and more. to check and manipulate characters based on their type or case.
+#include <stdlib.h> // stdlib.h include malloc(), free(), atoi(), rand(), exit(), and more. 
+#include <string.h> // strcpy(), strcat(), strcmp(), strlen(), strstr(), and more. 
+#include <stdbool.h> // The stdbool.h header file is a standard header file introduced in the C99 standard. It provides support for the Boolean data type and the constants true and false.
 #include <stdint.h>
 #include <unistd.h>
 #include <limits.h>
