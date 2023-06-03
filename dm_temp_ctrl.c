@@ -100,6 +100,12 @@ Static defined local variables do not lose their value between function calls. I
 Static global variables are not visible outside of the C file they are defined in.
 
 Static functions are not visible outside of the C file they are defined in.*/
+/*
+işlev: chain_temp->tmp_hi = 
+		chain_temp->tmp_lo = 
+		chain_temp->tmp_avg= 
+		değerlerini tanımlamak
+*/
 
 #ifndef USE_AUTOCMD0A
 static void dm_tempctrl_get_chain_temp(int *chip_temp, c_temp *chain_temp)
