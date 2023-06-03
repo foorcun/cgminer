@@ -58,7 +58,7 @@ void dm_tempctrl_get_defcfg(c_temp_cfg *p_cfg) // c_temp_cfg = struct, *p_cfg = 
 	p_cfg->tmp_exp_time	= 2000; // 2s
 }
 
-
+// işlev : The function is responsible for updating the global variable g_tmp_cfg with the values from the c_temp_cfg structure pointed to by p_cfg.
 void dm_tempctrl_set(c_temp_cfg *p_cfg)
 {
 	g_tmp_cfg = *p_cfg;
