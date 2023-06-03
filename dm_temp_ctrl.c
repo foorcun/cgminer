@@ -7,18 +7,18 @@
  * any later version.  See COPYING for more details.
  */
 
-#include <stdio.h>
+#include <stdio.h> // c library
 #include <stdint.h>
 #include <stdlib.h>
 
 #include "dragonmint_t1.h"
 
-#include "dm_temp_ctrl.h"
+#include "dm_temp_ctrl.h" // variable ları tanımlamak ve tutmak için yer
 
 /******************************************************************************
  * Macros & Constants
  ******************************************************************************/
-#define INVALID_TEMP			(9999)
+#define INVALID_TEMP			(9999) // const tanımlamak, pi gibi
 
 /******************************************************************************
  * Global variables
@@ -26,8 +26,12 @@
 volatile c_temp_cfg	g_tmp_cfg;			// configs of temperature control
 volatile c_temp		g_chain_tmp[MAX_CHAIN_NUM];	// current temperature per chain
 
+//volatile: It is a qualifier used in C to indicate that the value of the variable may change unexpectedly. When a variable is declared as volatile, it informs the compiler that the value of the variable can be modified by external sources, such as hardware or other threads.
+
 volatile int		g_tmp_last_upd_time[MAX_CHAIN_NUM];
 static uint32_t 	g_temp_status[MAX_CHAIN_NUM];
+
+//uint32_t is an unsigned 32-bit integer type, capable of holding values from 0 to 2^32 - 1.
 
 /******************************************************************************
  * Prototypes
