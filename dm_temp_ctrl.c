@@ -104,9 +104,9 @@ Static functions are not visible outside of the C file they are defined in.*/
 #ifndef USE_AUTOCMD0A
 static void dm_tempctrl_get_chain_temp(int *chip_temp, c_temp *chain_temp)
 {
-	int i, cnt, avg, index = -1;
+	int i, cnt, avg, index = -1; // cnt = count of valid temperatures
 
-	int compr_desc(const void *a, const void *b) {
+	int compr_desc(const void *a, const void *b) { // The function defines an internal comparison function named compr_desc, for qsort func.
 		return (*(int*)b - *(int*)a);
 	}
 	/* Sort descending */
