@@ -14,7 +14,7 @@
 // iki tirnak arası "  .h", file daki header ları yani önden tanımlı variable ları falan getirirken,
 // iki küçüktür-büyüktür arası <  .h>, library import eder.
 
-#include <stdio.h>
+#include <stdio.h> // printf(), scanf(), and file operations like fopen(), fclose(), etc.
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
