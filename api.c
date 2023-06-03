@@ -22,7 +22,7 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <limits.h>
-#include <sys/types.h>
+#include <sys/types.h> // The sys/types.h header file is a system header file in C that defines various data types used by system calls and other operating system-related functions.
 
 #include "compat.h"
 #include "miner.h"
