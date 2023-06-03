@@ -53,6 +53,7 @@
 #if defined WIN32
 static char WSAbuf[1024];
 
+// hashmap gibi bir kullanım
 struct WSAERRORS {
 	int id;
 	char *code;
