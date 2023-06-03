@@ -46,7 +46,7 @@ static uint32_t 	g_temp_status[MAX_CHAIN_NUM];
  * Arguments:	p_cfg		temperature configs
  * Return:		none
  ******************************************************************************/
-void dm_tempctrl_get_defcfg(c_temp_cfg *p_cfg)
+void dm_tempctrl_get_defcfg(c_temp_cfg *p_cfg) // c_temp_cfg = struct, *p_cfg = bu addresin işaret ettiği memorydeki  veri, işlevi= temperature için settings gibi bişi
 {
 	p_cfg->tmp_min		= -40;
 	p_cfg->tmp_max		= 125;
