@@ -15,17 +15,17 @@
 #include "elist.h"
 
 #if HAVE_UTHASH_H
-# include <uthash.h>
+#include <uthash.h>
 #else
-# include "uthash.h"
+#include "uthash.h"
 #endif
 
 #include "logging.h"
 #include "util.h"
 #include <sys/types.h>
 #ifndef WIN32
-# include <sys/socket.h>
-# include <netdb.h>
+#include <sys/socket.h>
+#include <netdb.h>
 #endif
 
 #ifdef USE_USBUTILS
@@ -33,35 +33,35 @@
 #endif
 
 #ifdef STDC_HEADERS
-# include <stdlib.h>
-# include <stddef.h>
+#include <stdlib.h>
+#include <stddef.h>
 #else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h>
+#endif
 #endif
 #ifdef HAVE_ALLOCA_H
-# include <alloca.h>
+#include <alloca.h>
 #elif defined __GNUC__
-# ifndef __FreeBSD__ /* FreeBSD has below #define in stdlib.h */
-#  ifndef WIN32
-#   define alloca __builtin_alloca
-#  else
-#   include <malloc.h>
-#  endif
-# endif
-#elif defined _AIX
-# define alloca __alloca
-#elif defined _MSC_VER
-# include <malloc.h>
-# define alloca _alloca
+#ifndef __FreeBSD__ /* FreeBSD has below #define in stdlib.h */
+#ifndef WIN32
+#define alloca __builtin_alloca
 #else
-# ifndef HAVE_ALLOCA
-#  ifdef  __cplusplus
+#include <malloc.h>
+#endif
+#endif
+#elif defined _AIX
+#define alloca __alloca
+#elif defined _MSC_VER
+#include <malloc.h>
+#define alloca _alloca
+#else
+#ifndef HAVE_ALLOCA
+#ifdef __cplusplus
 extern "C"
-#  endif
-void *alloca (size_t);
-# endif
+#endif
+	void *alloca(size_t);
+#endif
 #endif
 
 #ifdef HAVE_LIBCURL
@@ -70,75 +70,80 @@ void *alloca (size_t);
 typedef char CURL;
 extern char *curly;
 #define curl_easy_init(curl) (curly)
-#define curl_easy_cleanup(curl) {}
-#define curl_global_cleanup() {}
+#define curl_easy_cleanup(curl) \
+	{                           \
+	}
+#define curl_global_cleanup() \
+	{                         \
+	}
 #define CURL_GLOBAL_ALL 0
 #define curl_global_init(X) (0)
 #endif
 
 #ifdef __MINGW32__
 #include <io.h>
-static inline int fsync (int fd)
+static inline int fsync(int fd)
 {
-	return (FlushFileBuffers ((HANDLE) _get_osfhandle (fd))) ? 0 : -1;
+	return (FlushFileBuffers((HANDLE)_get_osfhandle(fd))) ? 0 : -1;
 }
 
 #ifndef EWOULDBLOCK
-# define EWOULDBLOCK EAGAIN
+#define EWOULDBLOCK EAGAIN
 #endif
 
 #ifndef MSG_DONTWAIT
-# define MSG_DONTWAIT 0x1000000
+#define MSG_DONTWAIT 0x1000000
 #endif
 #endif /* __MINGW32__ */
 
-#if defined (__linux)
- #ifndef LINUX
-  #define LINUX
- #endif
+#if defined(__linux)
+#ifndef LINUX
+#define LINUX
+#endif
 #endif
 
 #ifdef WIN32
-  #ifndef timersub
-    #define timersub(a, b, result)                     \
-    do {                                               \
-      (result)->tv_sec = (a)->tv_sec - (b)->tv_sec;    \
-      (result)->tv_usec = (a)->tv_usec - (b)->tv_usec; \
-      if ((result)->tv_usec < 0) {                     \
-        --(result)->tv_sec;                            \
-        (result)->tv_usec += 1000000;                  \
-      }                                                \
-    } while (0)
-  #endif
- #ifndef timeradd
- # define timeradd(a, b, result)			      \
-   do {							      \
-    (result)->tv_sec = (a)->tv_sec + (b)->tv_sec;	      \
-    (result)->tv_usec = (a)->tv_usec + (b)->tv_usec;	      \
-    if ((result)->tv_usec >= 1000000)			      \
-      {							      \
-	++(result)->tv_sec;				      \
-	(result)->tv_usec -= 1000000;			      \
-      }							      \
-   } while (0)
- #endif
+#ifndef timersub
+#define timersub(a, b, result)                           \
+	do                                                   \
+	{                                                    \
+		(result)->tv_sec = (a)->tv_sec - (b)->tv_sec;    \
+		(result)->tv_usec = (a)->tv_usec - (b)->tv_usec; \
+		if ((result)->tv_usec < 0)                       \
+		{                                                \
+			--(result)->tv_sec;                          \
+			(result)->tv_usec += 1000000;                \
+		}                                                \
+	} while (0)
 #endif
-
-
-#ifdef USE_USBUTILS
-  #include <libusb.h>
+#ifndef timeradd
+#define timeradd(a, b, result)                           \
+	do                                                   \
+	{                                                    \
+		(result)->tv_sec = (a)->tv_sec + (b)->tv_sec;    \
+		(result)->tv_usec = (a)->tv_usec + (b)->tv_usec; \
+		if ((result)->tv_usec >= 1000000)                \
+		{                                                \
+			++(result)->tv_sec;                          \
+			(result)->tv_usec -= 1000000;                \
+		}                                                \
+	} while (0)
+#endif
 #endif
 
 #ifdef USE_USBUTILS
-  #include "usbutils.h"
+#include <libusb.h>
 #endif
 
-#if (!defined(WIN32) && ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))) \
-    || (defined(WIN32) && ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 7)))
+#ifdef USE_USBUTILS
+#include "usbutils.h"
+#endif
+
+#if (!defined(WIN32) && ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))) || (defined(WIN32) && ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 7)))
 #ifndef bswap_16
- #define bswap_16 __builtin_bswap16
- #define bswap_32 __builtin_bswap32
- #define bswap_64 __builtin_bswap64
+#define bswap_16 __builtin_bswap16
+#define bswap_32 __builtin_bswap32
+#define bswap_64 __builtin_bswap64
 #endif
 #else
 #if HAVE_BYTESWAP_H
@@ -151,53 +156,53 @@ static inline int fsync (int fd)
 #define bswap_32 OSSwapInt32
 #define bswap_64 OSSwapInt64
 #else
-#define	bswap_16(value)  \
- 	((((value) & 0xff) << 8) | ((value) >> 8))
+#define bswap_16(value) \
+	((((value)&0xff) << 8) | ((value) >> 8))
 
-#define	bswap_32(value)	\
- 	(((uint32_t)bswap_16((uint16_t)((value) & 0xffff)) << 16) | \
- 	(uint32_t)bswap_16((uint16_t)((value) >> 16)))
+#define bswap_32(value)                                       \
+	(((uint32_t)bswap_16((uint16_t)((value)&0xffff)) << 16) | \
+	 (uint32_t)bswap_16((uint16_t)((value) >> 16)))
 
-#define	bswap_64(value)	\
- 	(((uint64_t)bswap_32((uint32_t)((value) & 0xffffffff)) \
- 	    << 32) | \
- 	(uint64_t)bswap_32((uint32_t)((value) >> 32)))
+#define bswap_64(value)                                  \
+	(((uint64_t)bswap_32((uint32_t)((value)&0xffffffff)) \
+	  << 32) |                                           \
+	 (uint64_t)bswap_32((uint32_t)((value) >> 32)))
 #endif
 #endif /* !defined(__GLXBYTEORDER_H__) */
 
 /* This assumes htobe32 is a macro in endian.h, and if it doesn't exist, then
  * htobe64 also won't exist */
 #ifndef htobe32
-# if __BYTE_ORDER == __LITTLE_ENDIAN
-#  define htole16(x) (x)
-#  define le16toh(x) (x)
-#  define htole32(x) (x)
-#  define htole64(x) (x)
-#  define le32toh(x) (x)
-#  define le64toh(x) (x)
-#  define be32toh(x) bswap_32(x)
-#  define be64toh(x) bswap_64(x)
-#  define htobe16(x) bswap_16(x)
-#  define htobe32(x) bswap_32(x)
-#  define htobe64(x) bswap_64(x)
-# elif __BYTE_ORDER == __BIG_ENDIAN
-#  define htole16(x) bswap_16(x)
-#  define le16toh(x) bswap_16(x)
-#  define htole32(x) bswap_32(x)
-#  define le32toh(x) bswap_32(x)
-#  define le64toh(x) bswap_64(x)
-#  define htole64(x) bswap_64(x)
-#  define be32toh(x) (x)
-#  define be64toh(x) (x)
-#  define htobe16(x) (x)
-#  define htobe32(x) (x)
-#  define htobe64(x) (x)
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+#define htole16(x) (x)
+#define le16toh(x) (x)
+#define htole32(x) (x)
+#define htole64(x) (x)
+#define le32toh(x) (x)
+#define le64toh(x) (x)
+#define be32toh(x) bswap_32(x)
+#define be64toh(x) bswap_64(x)
+#define htobe16(x) bswap_16(x)
+#define htobe32(x) bswap_32(x)
+#define htobe64(x) bswap_64(x)
+#elif __BYTE_ORDER == __BIG_ENDIAN
+#define htole16(x) bswap_16(x)
+#define le16toh(x) bswap_16(x)
+#define htole32(x) bswap_32(x)
+#define le32toh(x) bswap_32(x)
+#define le64toh(x) bswap_64(x)
+#define htole64(x) bswap_64(x)
+#define be32toh(x) (x)
+#define be64toh(x) (x)
+#define htobe16(x) (x)
+#define htobe32(x) (x)
+#define htobe64(x) (x)
 #else
 #error UNKNOWN BYTE ORDER
 #endif
 #endif
 
-#undef unlikely
+#undef unlikely // The #undef directive in the C programming language is used to undefine a previously defined macro. In this case, #undef unlikely is removing the definition of the macro named unlikely.
 #undef likely
 #if defined(__GNUC__) && (__GNUC__ > 2) && defined(__OPTIMIZE__)
 #define unlikely(expr) (__builtin_expect(!!(expr), 0))
@@ -206,7 +211,7 @@ static inline int fsync (int fd)
 #define unlikely(expr) (expr)
 #define likely(expr) (expr)
 #endif
-#define __maybe_unused		__attribute__((unused))
+#define __maybe_unused __attribute__((unused))
 
 #define uninitialised_var(x) x = x
 
@@ -224,10 +229,10 @@ static inline int fsync (int fd)
 #endif
 
 #ifndef MIN
-#define MIN(x, y)	((x) > (y) ? (y) : (x))
+#define MIN(x, y) ((x) > (y) ? (y) : (x))
 #endif
 #ifndef MAX
-#define MAX(x, y)	((x) > (y) ? (x) : (y))
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
 #endif
 
 #define MACSTR(_num) MACSTR2(_num)
@@ -238,55 +243,57 @@ static inline int fsync (int fd)
  * update all macros in the code that use the *_PARSE_COMMANDS macros for each
  * listed driver. */
 #define FPGA_PARSE_COMMANDS(DRIVER_ADD_COMMAND) \
-	DRIVER_ADD_COMMAND(bitforce) \
+	DRIVER_ADD_COMMAND(bitforce)                \
 	DRIVER_ADD_COMMAND(modminer)
 
 #define ASIC_PARSE_COMMANDS(DRIVER_ADD_COMMAND) \
-	DRIVER_ADD_COMMAND(ants1) \
-	DRIVER_ADD_COMMAND(ants2) \
-	DRIVER_ADD_COMMAND(ants3) \
-	DRIVER_ADD_COMMAND(avalon) \
-	DRIVER_ADD_COMMAND(avalon2) \
-	DRIVER_ADD_COMMAND(avalon4) \
-	DRIVER_ADD_COMMAND(avalon7) \
-	DRIVER_ADD_COMMAND(avalon8) \
-	DRIVER_ADD_COMMAND(avalonm) \
-	DRIVER_ADD_COMMAND(bab) \
-	DRIVER_ADD_COMMAND(bflsc) \
-	DRIVER_ADD_COMMAND(bitfury) \
-	DRIVER_ADD_COMMAND(bitfury16) \
-	DRIVER_ADD_COMMAND(bitmineA1) \
-	DRIVER_ADD_COMMAND(blockerupter) \
-	DRIVER_ADD_COMMAND(cointerra) \
-	DRIVER_ADD_COMMAND(dragonmintT1) \
-	DRIVER_ADD_COMMAND(hashfast) \
-	DRIVER_ADD_COMMAND(drillbit) \
-	DRIVER_ADD_COMMAND(hashratio) \
-	DRIVER_ADD_COMMAND(icarus) \
-	DRIVER_ADD_COMMAND(klondike) \
-	DRIVER_ADD_COMMAND(knc) \
-	DRIVER_ADD_COMMAND(minion) \
-	DRIVER_ADD_COMMAND(sp10) \
-	DRIVER_ADD_COMMAND(sp30) \
+	DRIVER_ADD_COMMAND(ants1)                   \
+	DRIVER_ADD_COMMAND(ants2)                   \
+	DRIVER_ADD_COMMAND(ants3)                   \
+	DRIVER_ADD_COMMAND(avalon)                  \
+	DRIVER_ADD_COMMAND(avalon2)                 \
+	DRIVER_ADD_COMMAND(avalon4)                 \
+	DRIVER_ADD_COMMAND(avalon7)                 \
+	DRIVER_ADD_COMMAND(avalon8)                 \
+	DRIVER_ADD_COMMAND(avalonm)                 \
+	DRIVER_ADD_COMMAND(bab)                     \
+	DRIVER_ADD_COMMAND(bflsc)                   \
+	DRIVER_ADD_COMMAND(bitfury)                 \
+	DRIVER_ADD_COMMAND(bitfury16)               \
+	DRIVER_ADD_COMMAND(bitmineA1)               \
+	DRIVER_ADD_COMMAND(blockerupter)            \
+	DRIVER_ADD_COMMAND(cointerra)               \
+	DRIVER_ADD_COMMAND(dragonmintT1)            \
+	DRIVER_ADD_COMMAND(hashfast)                \
+	DRIVER_ADD_COMMAND(drillbit)                \
+	DRIVER_ADD_COMMAND(hashratio)               \
+	DRIVER_ADD_COMMAND(icarus)                  \
+	DRIVER_ADD_COMMAND(klondike)                \
+	DRIVER_ADD_COMMAND(knc)                     \
+	DRIVER_ADD_COMMAND(minion)                  \
+	DRIVER_ADD_COMMAND(sp10)                    \
+	DRIVER_ADD_COMMAND(sp30)                    \
 	DRIVER_ADD_COMMAND(bitmain_soc)
 
 #define DRIVER_PARSE_COMMANDS(DRIVER_ADD_COMMAND) \
-	FPGA_PARSE_COMMANDS(DRIVER_ADD_COMMAND) \
+	FPGA_PARSE_COMMANDS(DRIVER_ADD_COMMAND)       \
 	ASIC_PARSE_COMMANDS(DRIVER_ADD_COMMAND)
 
 #define DRIVER_ENUM(X) DRIVER_##X,
 #define DRIVER_PROTOTYPE(X) struct device_drv X##_drv;
 
 /* Create drv_driver enum from DRIVER_PARSE_COMMANDS macro */
-enum drv_driver {
+enum drv_driver
+{
 	DRIVER_PARSE_COMMANDS(DRIVER_ENUM)
-	DRIVER_MAX
+		DRIVER_MAX
 };
 
 /* Use DRIVER_PARSE_COMMANDS to generate extern device_drv prototypes */
 DRIVER_PARSE_COMMANDS(DRIVER_PROTOTYPE)
 
-enum alive {
+enum alive
+{
 	LIFE_WELL,
 	LIFE_SICK,
 	LIFE_DEAD,
@@ -294,8 +301,8 @@ enum alive {
 	LIFE_INIT,
 };
 
-
-enum pool_strategy {
+enum pool_strategy
+{
 	POOL_FAILOVER,
 	POOL_ROUNDROBIN,
 	POOL_ROTATE,
@@ -305,7 +312,8 @@ enum pool_strategy {
 
 #define TOP_STRATEGY (POOL_BALANCE)
 
-struct strategies {
+struct strategies
+{
 	const char *s;
 };
 
@@ -317,7 +325,8 @@ struct api_data;
 struct thr_info;
 struct work;
 
-struct device_drv {
+struct device_drv
+{
 	enum drv_driver drv_id;
 
 	char *dname;
@@ -379,15 +388,17 @@ struct device_drv {
 	bool genwork;
 };
 
-extern struct device_drv *copy_drv(struct device_drv*);
+extern struct device_drv *copy_drv(struct device_drv *);
 
-enum dev_enable {
+enum dev_enable
+{
 	DEV_ENABLED,
 	DEV_DISABLED,
 	DEV_RECOVER,
 };
 
-enum dev_reason {
+enum dev_reason
+{
 	REASON_THREAD_FAIL_INIT,
 	REASON_THREAD_ZERO_HASH,
 	REASON_THREAD_FAIL_QUEUE,
@@ -400,22 +411,23 @@ enum dev_reason {
 	REASON_DEV_THROTTLE,
 };
 
-#define REASON_NONE			"None"
-#define REASON_THREAD_FAIL_INIT_STR	"Thread failed to init"
-#define REASON_THREAD_ZERO_HASH_STR	"Thread got zero hashes"
-#define REASON_THREAD_FAIL_QUEUE_STR	"Thread failed to queue work"
-#define REASON_DEV_SICK_IDLE_60_STR	"Device idle for 60s"
-#define REASON_DEV_DEAD_IDLE_600_STR	"Device dead - idle for 600s"
-#define REASON_DEV_NOSTART_STR		"Device failed to start"
-#define REASON_DEV_OVER_HEAT_STR	"Device over heated"
-#define REASON_DEV_THERMAL_CUTOFF_STR	"Device reached thermal cutoff"
-#define REASON_DEV_COMMS_ERROR_STR	"Device comms error"
-#define REASON_DEV_THROTTLE_STR		"Device throttle"
-#define REASON_UNKNOWN_STR		"Unknown reason - code bug"
+#define REASON_NONE "None"
+#define REASON_THREAD_FAIL_INIT_STR "Thread failed to init"
+#define REASON_THREAD_ZERO_HASH_STR "Thread got zero hashes"
+#define REASON_THREAD_FAIL_QUEUE_STR "Thread failed to queue work"
+#define REASON_DEV_SICK_IDLE_60_STR "Device idle for 60s"
+#define REASON_DEV_DEAD_IDLE_600_STR "Device dead - idle for 600s"
+#define REASON_DEV_NOSTART_STR "Device failed to start"
+#define REASON_DEV_OVER_HEAT_STR "Device over heated"
+#define REASON_DEV_THERMAL_CUTOFF_STR "Device reached thermal cutoff"
+#define REASON_DEV_COMMS_ERROR_STR "Device comms error"
+#define REASON_DEV_THROTTLE_STR "Device throttle"
+#define REASON_UNKNOWN_STR "Unknown reason - code bug"
 
 #define MIN_SEC_UNSET 99999999
 
-struct cgminer_stats {
+struct cgminer_stats
+{
 	uint32_t getwork_calls;
 	struct timeval getwork_wait;
 	struct timeval getwork_wait_max;
@@ -423,7 +435,8 @@ struct cgminer_stats {
 };
 
 // Just the actual network getworks to the pool
-struct cgminer_pool_stats {
+struct cgminer_pool_stats
+{
 	uint32_t getwork_calls;
 	uint32_t getwork_attempts;
 	struct timeval getwork_wait;
@@ -447,7 +460,8 @@ struct cgminer_pool_stats {
 	uint64_t net_bytes_received;
 };
 
-struct cgpu_info {
+struct cgpu_info
+{
 	int cgminer_id;
 	struct device_drv *drv;
 	int device_id;
@@ -462,7 +476,7 @@ struct cgpu_info {
 	bool blacklisted;
 	bool nozlp; // Device prefers no zero length packet
 #endif
-#if defined(USE_AVALON) || defined(USE_AVALON2) || defined (USE_AVALON_MINER)
+#if defined(USE_AVALON) || defined(USE_AVALON2) || defined(USE_AVALON_MINER)
 	struct work **works;
 	int work_array;
 	int queued;
@@ -538,7 +552,7 @@ struct cgpu_info {
 	int dev_sick_idle_60_count;
 	int dev_dead_idle_600_count;
 	int dev_nostart_count;
-	int dev_over_heat_count;	// It's a warning but worth knowing
+	int dev_over_heat_count; // It's a warning but worth knowing
 	int dev_thermal_cutoff_count;
 	int dev_comms_error_count;
 	int dev_throttle_count;
@@ -560,38 +574,41 @@ struct cgpu_info {
 	int direction;
 };
 
-extern bool add_cgpu(struct cgpu_info*);
+extern bool add_cgpu(struct cgpu_info *);
 
-struct thread_q {
-	struct list_head	q;
+struct thread_q
+{
+	struct list_head q;
 
 	bool frozen;
 
-	pthread_mutex_t		mutex;
-	pthread_cond_t		cond;
+	pthread_mutex_t mutex;
+	pthread_cond_t cond;
 };
 
-struct thr_info {
-	int		id;
-	int		device_thread;
-	bool		primary_thread;
+struct thr_info
+{
+	int id;
+	int device_thread;
+	bool primary_thread;
 
-	pthread_t	pth;
-	cgsem_t		sem;
-	struct thread_q	*q;
+	pthread_t pth;
+	cgsem_t sem;
+	struct thread_q *q;
 	struct cgpu_info *cgpu;
 	void *cgpu_data;
 	struct timeval last;
 	struct timeval sick;
 
-	bool	pause;
-	bool	getwork;
+	bool pause;
+	bool getwork;
 
-	bool	work_restart;
-	bool	work_update;
+	bool work_restart;
+	bool work_update;
 };
 
-struct string_elist {
+struct string_elist
+{
 	char *string;
 	bool free_me;
 
@@ -614,7 +631,6 @@ static inline void string_elist_del(struct string_elist *item)
 		free(item->string);
 	list_del(&item->list);
 }
-
 
 static inline uint32_t swab32(uint32_t v)
 {
@@ -743,7 +759,8 @@ extern void _quit(int status);
 #define LOCK_TRACKING 0
 
 #if LOCK_TRACKING
-enum cglock_typ {
+enum cglock_typ
+{
 	CGLOCK_MUTEX,
 	CGLOCK_RW,
 	CGLOCK_UNKNOWN
@@ -1118,8 +1135,8 @@ extern const uint32_t sha256_init_state[];
 #ifdef HAVE_LIBCURL
 extern json_t *json_web_config(const char *url);
 extern json_t *json_rpc_call(CURL *curl, const char *url, const char *userpass,
-			     const char *rpc_req, bool, bool, int *,
-			     struct pool *pool, bool);
+							 const char *rpc_req, bool, bool, int *,
+							 struct pool *pool, bool);
 struct pool;
 extern struct pool *opt_btcd;
 #endif
@@ -1129,13 +1146,13 @@ extern void __bin2hex(char *s, const unsigned char *p, size_t len);
 extern char *bin2hex(const unsigned char *p, size_t len);
 extern bool hex2bin(unsigned char *p, const char *hexstr, size_t len);
 
-typedef bool (*sha256_func)(struct thr_info*, const unsigned char *pmidstate,
-	unsigned char *pdata,
-	unsigned char *phash1, unsigned char *phash,
-	const unsigned char *ptarget,
-	uint32_t max_nonce,
-	uint32_t *last_nonce,
-	uint32_t nonce);
+typedef bool (*sha256_func)(struct thr_info *, const unsigned char *pmidstate,
+							unsigned char *pdata,
+							unsigned char *phash1, unsigned char *phash,
+							const unsigned char *ptarget,
+							uint32_t max_nonce,
+							uint32_t *last_nonce,
+							uint32_t nonce);
 
 extern bool fulltest(const unsigned char *hash, const unsigned char *target);
 
@@ -1154,9 +1171,9 @@ extern pthread_cond_t restart_cond;
 extern void clear_stratum_shares(struct pool *pool);
 extern void clear_pool_work(struct pool *pool);
 extern void set_target(unsigned char *dest_target, double diff);
-#if defined (USE_AVALON2) || defined (USE_AVALON4) || defined (USE_AVALON7) || defined (USE_AVALON8) || defined (USE_AVALON_MINER) || defined (USE_HASHRATIO)
+#if defined(USE_AVALON2) || defined(USE_AVALON4) || defined(USE_AVALON7) || defined(USE_AVALON8) || defined(USE_AVALON_MINER) || defined(USE_HASHRATIO)
 bool submit_nonce2_nonce(struct thr_info *thr, struct pool *pool, struct pool *real_pool,
-			 uint32_t nonce2, uint32_t nonce, uint32_t ntime);
+						 uint32_t nonce2, uint32_t nonce, uint32_t ntime);
 #endif
 #ifdef USE_BITMAIN_SOC
 void get_work_by_nonce2(struct thr_info *thr,
@@ -1241,7 +1258,8 @@ extern time_t total_tv_end_sys;
 extern void writeInitLogFile(char *logstr);
 #endif
 
-struct curl_ent {
+struct curl_ent
+{
 	CURL *curl;
 	struct list_head node;
 	struct timeval tv;
@@ -1249,13 +1267,15 @@ struct curl_ent {
 
 /* Disabled needs to be the lowest enum as a freshly calloced value will then
  * equal disabled */
-enum pool_enable {
+enum pool_enable
+{
 	POOL_DISABLED,
 	POOL_ENABLED,
 	POOL_REJECTING,
 };
 
-struct stratum_work {
+struct stratum_work
+{
 	char *job_id;
 	unsigned char **merkle_bin;
 	bool clean;
@@ -1266,7 +1286,8 @@ struct stratum_work {
 #define RBUFSIZE 8192
 #define RECVSIZE (RBUFSIZE - 4)
 
-struct pool {
+struct pool
+{
 	int pool_no;
 	int prio;
 	int64_t accepted, rejected;
@@ -1414,9 +1435,9 @@ struct pool {
 
 	struct timeval tv_lastwork;
 #ifdef USE_BITMAIN_SOC
-    bool support_vil;
-    int version_num;
-    int version[4];
+	bool support_vil;
+	int version_num;
+	int version[4];
 #endif
 };
 
@@ -1428,80 +1449,82 @@ struct pool {
 #define GETWORK_MODE_GBT 'G'
 #define GETWORK_MODE_SOLO 'C'
 
-struct work {
-	unsigned char	data[128];
-	unsigned char	midstate[32];
-	unsigned char   midstate1[32];
-	unsigned char   midstate2[32];
-	unsigned char   midstate3[32];
-	unsigned char	target[32];
-	unsigned char	hash[32];
+struct work
+{
+	unsigned char data[128];
+	unsigned char midstate[32];
+	unsigned char midstate1[32];
+	unsigned char midstate2[32];
+	unsigned char midstate3[32];
+	unsigned char target[32];
+	unsigned char hash[32];
 
-	uint16_t        micro_job_id;
+	uint16_t micro_job_id;
 
 	/* This is the diff the device is currently aiming for and must be
 	 * the minimum of work_difficulty & drv->max_diff */
-	double		device_diff;
-	uint64_t	share_diff;
+	double device_diff;
+	uint64_t share_diff;
 
-	int		rolls;
-	int		drv_rolllimit; /* How much the driver can roll ntime */
-	uint32_t	nonce; /* For devices that hash sole work */
+	int rolls;
+	int drv_rolllimit; /* How much the driver can roll ntime */
+	uint32_t nonce;	   /* For devices that hash sole work */
 
-	struct thr_info	*thr;
-	int		thr_id;
-	struct pool	*pool;
-	struct timeval	tv_staged;
+	struct thr_info *thr;
+	int thr_id;
+	struct pool *pool;
+	struct timeval tv_staged;
 
-	bool		mined;
-	bool		clone;
-	bool		cloned;
-	int		rolltime;
-	bool		longpoll;
-	bool		stale;
-	bool		mandatory;
-	bool		block;
+	bool mined;
+	bool clone;
+	bool cloned;
+	int rolltime;
+	bool longpoll;
+	bool stale;
+	bool mandatory;
+	bool block;
 
-	bool		stratum;
-	char 		*job_id;
-	uint64_t	nonce2;
-	size_t		nonce2_len;
-	char		*ntime;
-	double		sdiff;
-	char		*nonce1;
+	bool stratum;
+	char *job_id;
+	uint64_t nonce2;
+	size_t nonce2_len;
+	char *ntime;
+	double sdiff;
+	char *nonce1;
 
-	bool		gbt;
-	char		*coinbase;
-	int		gbt_txns;
+	bool gbt;
+	char *coinbase;
+	int gbt_txns;
 
-	unsigned int	work_block;
-	uint32_t	id;
-	UT_hash_handle	hh;
+	unsigned int work_block;
+	uint32_t id;
+	UT_hash_handle hh;
 
 	/* This is the diff work we're aiming to submit and should match the
 	 * work->target binary */
-	double		work_difficulty;
+	double work_difficulty;
 
 	// Allow devices to identify work if multiple sub-devices
-	int		subid;
+	int subid;
 	// Allow devices to flag work for their own purposes
-	bool		devflag;
+	bool devflag;
 	// Allow devices to timestamp work for their own purposes
-	struct timeval	tv_stamp;
+	struct timeval tv_stamp;
 
-	struct timeval	tv_getwork;
-	struct timeval	tv_getwork_reply;
-	struct timeval	tv_cloned;
-	struct timeval	tv_work_start;
-	struct timeval	tv_work_found;
-	char		getwork_mode;
+	struct timeval tv_getwork;
+	struct timeval tv_getwork_reply;
+	struct timeval tv_cloned;
+	struct timeval tv_work_start;
+	struct timeval tv_work_found;
+	char getwork_mode;
 #ifdef USE_BITMAIN_SOC
-    int version;
+	int version;
 #endif
 };
 
 #ifdef USE_MODMINER
-struct modminer_fpga_state {
+struct modminer_fpga_state
+{
 	bool work_running;
 	struct work running_work;
 	struct timeval tv_workstart;
@@ -1530,15 +1553,17 @@ struct modminer_fpga_state {
 
 #define TAILBUFSIZ 64
 
-#define tailsprintf(buf, bufsiz, fmt, ...) do { \
-	char tmp13[TAILBUFSIZ]; \
-	size_t len13, buflen = strlen(buf); \
-	snprintf(tmp13, sizeof(tmp13), fmt, ##__VA_ARGS__); \
-	len13 = strlen(tmp13); \
-	if ((buflen + len13) >= bufsiz) \
-		quit(1, "tailsprintf buffer overflow in %s %s line %d", __FILE__, __func__, __LINE__); \
-	strcat(buf, tmp13); \
-} while (0)
+#define tailsprintf(buf, bufsiz, fmt, ...)                                                         \
+	do                                                                                             \
+	{                                                                                              \
+		char tmp13[TAILBUFSIZ];                                                                    \
+		size_t len13, buflen = strlen(buf);                                                        \
+		snprintf(tmp13, sizeof(tmp13), fmt, ##__VA_ARGS__);                                        \
+		len13 = strlen(tmp13);                                                                     \
+		if ((buflen + len13) >= bufsiz)                                                            \
+			quit(1, "tailsprintf buffer overflow in %s %s line %d", __FILE__, __func__, __LINE__); \
+		strcat(buf, tmp13);                                                                        \
+	} while (0)
 
 extern void get_datestamp(char *, size_t, struct timeval *);
 extern void inc_hw_errors(struct thr_info *thr);
@@ -1547,7 +1572,7 @@ extern bool test_nonce_diff(struct work *work, uint32_t nonce, double diff);
 extern bool submit_tested_work(struct thr_info *thr, struct work *work);
 extern bool submit_nonce(struct thr_info *thr, struct work *work, uint32_t nonce);
 extern bool submit_noffset_nonce(struct thr_info *thr, struct work *work, uint32_t nonce,
-			  int noffset);
+								 int noffset);
 extern int share_work_tdiff(struct cgpu_info *cgpu);
 extern struct work *get_work(struct thr_info *thr, const int thr_id);
 extern void __add_queued(struct cgpu_info *cgpu, struct work *work);
@@ -1609,7 +1634,8 @@ extern uint64_t share_diff(const struct work *work);
 extern struct thr_info *get_thread(int thr_id);
 extern struct cgpu_info *get_devices(int id);
 
-enum api_data_type {
+enum api_data_type
+{
 	API_ESCAPE,
 	API_STRING,
 	API_CONST,
@@ -1639,7 +1665,8 @@ enum api_data_type {
 	API_AVG
 };
 
-struct api_data {
+struct api_data
+{
 	enum api_data_type type;
 	char *name;
 	void *data;

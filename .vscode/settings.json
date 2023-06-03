@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "miner.h": "c",
+        "sha2.h": "c",
+        "types.h": "c",
+        "jansson.h": "c",
+        "config.h": "c"
+    }
+}

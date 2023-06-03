@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "sha2.h": "c",
+        "jansson.h": "c",
+        "opt.h": "c",
+        "compiler.h": "c",
+        "typesafe_cb.h": "c",
+        "compat.h": "c",
+        "errno.h": "c"
+    }
+}
