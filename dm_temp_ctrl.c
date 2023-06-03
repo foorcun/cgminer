@@ -73,17 +73,20 @@ void dm_tempctrl_set(c_temp_cfg *p_cfg)
  ******************************************************************************/
 void dm_tempctrl_init(c_temp_cfg *p_cfg)
 {
-	int i;
-
+	
 	// FIXME: add mutex here
 	if (NULL == p_cfg) {
-		c_temp_cfg cfg; // cfg veri alanı tanımlanıyor
-		dm_tempctrl_get_defcfg(&cfg);  // avoid to pass volatile pointer directly
+		//1. memoryde yer aç
+		c_temp_cfg cfg; // cfg veri alanı tanımlanıyor, memoryde(RAMde) veriye yer açıyor
+		//2. default değerleri al
+		dm_tempctrl_get_defcfg(&cfg);  // avoid to pass volatile pointer directly // func void return olsada cfg ye veri işliyor
+		//3. değerleri global g_tmp_cfg pointer a at
 		dm_tempctrl_set(&cfg); // burda da tanımlanan cfg veri alanının Adresi input veriliyor cünkü input pointer
 	} else
 		dm_tempctrl_set(p_cfg);
-
-	for(i = 0; i < MAX_CHAIN_NUM; ++i) {
+	
+	int i;
+	for(i = 0; i < MAX_CHAIN_NUM; ++i) { 
 		g_chain_tmp[i].tmp_lo = g_chain_tmp[i].tmp_hi
 			= g_chain_tmp[i].tmp_avg = INVALID_TEMP;
 	}
