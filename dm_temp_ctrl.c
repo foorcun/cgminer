@@ -92,6 +92,15 @@ void dm_tempctrl_init(c_temp_cfg *p_cfg)
 	}
 }
 
+//The #ifndef USE_AUTOCMD0A condition checks whether the preprocessor symbol USE_AUTOCMD0A is not defined. If it is not defined, the code within this block will be compiled. This is a conditional compilation technique where the enclosed code is included only if the symbol is not defined.
+/*Short answer ... it depends.
+
+Static defined local variables do not lose their value between function calls. In other words they are global variables, but scoped to the local function they are defined in.
+
+Static global variables are not visible outside of the C file they are defined in.
+
+Static functions are not visible outside of the C file they are defined in.*/
+
 #ifndef USE_AUTOCMD0A
 static void dm_tempctrl_get_chain_temp(int *chip_temp, c_temp *chain_temp)
 {
