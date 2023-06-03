@@ -11,6 +11,9 @@
 
 #include "config.h"
 
+// iki tirnak arası "  .h", file daki header ları yani önden tanımlı variable ları falan getirirken,
+// iki küçüktür-büyüktür arası <  .h>, library import eder.
+
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
