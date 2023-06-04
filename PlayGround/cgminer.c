@@ -40,8 +40,8 @@
 // #include <semaphore.h>
 // #endif
 
-// #ifdef USE_LIBSYSTEMD
-// #include <systemd/sd-daemon.h>
+// #ifdef USE_LIBSYSTEMD 
+// #include <systemd/sd-daemon.h> This header file is specific to systems that use the systemd init system, typically found in many Linux distributions.
 // #endif
 
 // #include <sys/stat.h>
@@ -10951,11 +10951,11 @@ int main(int argc, char *argv[])
     if (unlikely(curl_global_init(CURL_GLOBAL_ALL))) // unlikely(curl_global_init(CURL_GLOBAL_ALL)), 0 donduren gepgereksiz bisi
         early_quit(1, "Failed to curl_global_init");
 
-    // #ifdef USE_LIBSYSTEMD
+    // #ifdef USE_LIBSYSTEMD // Linux için olabilr
     // 	sd_notify(false, "STATUS=Starting up...");
     // #endif
 
-    // #ifdef __linux
+    // #ifdef __linux // linux da ise
     // 	/* If we're on a small lowspec platform with only one CPU, we should
     // 	 * yield after dropping a lock to allow a thread waiting for it to be
     // 	 * able to get CPU time to grab the lock. */
@@ -10963,11 +10963,11 @@ int main(int argc, char *argv[])
     // 		selective_yield = &sched_yield;
     // #endif
 
-    // #if LOCK_TRACKING
-    // 	// Must be first
-    // 	if (unlikely(pthread_mutex_init(&lockstat_lock, NULL)))
-    // 		quithere(1, "Failed to pthread_mutex_init lockstat_lock errno=%d", errno);
-    // #endif
+     #if LOCK_TRACKING
+     	// Must be first
+     	if (unlikely(pthread_mutex_init(&lockstat_lock, NULL))) // mutex sanırım aynı andalık sorununa çözüm ile ilgili
+     		quithere(1, "Failed to pthread_mutex_init lockstat_lock errno=%d", errno);
+     #endif
 
     // 	initial_args = cgmalloc(sizeof(char *) * (argc + 1));
     // 	for (i = 0; i < argc; i++)
