@@ -84,7 +84,7 @@ extern void _simplelog(int prio, const char *str, bool force);
 		{                                                              \
 			if (use_syslog || opt_log_output || prio <= opt_log_level) \
 			{                                                          \
-				char tmp42[LOGBUFSIZ];                                 \
+				char tmp42[LOGBUFSIZ];                                 \ // #define LOGBUFSIZ 256, bu sayfada
 				snprintf(tmp42, sizeof(tmp42), fmt, ##__VA_ARGS__);    \
 				_applog(prio, tmp42, true);                            \
 			}                                                          \
@@ -94,11 +94,11 @@ extern void _simplelog(int prio, const char *str, bool force);
 #define quit(status, fmt, ...)                                  \
 	do                                                          \
 	{                                                           \
-		if (fmt)                                                \
+		if (fmt)                                                \ // fmt parameter (the format string) 
 		{                                                       \
 			char tmp42[LOGBUFSIZ];                              \
 			snprintf(tmp42, sizeof(tmp42), fmt, ##__VA_ARGS__); \
-			_applog(LOG_ERR, tmp42, true);                      \
+			_applog(LOG_ERR, tmp42, true);                      \ // _applog function, which likely logs the error message with the LOG_ERR level.
 		}                                                       \
 		_quit(status);                                          \
 	} while (0)
@@ -136,7 +136,7 @@ extern void _simplelog(int prio, const char *str, bool force);
 			char tmp42[LOGBUFSIZ];                         \
 			snprintf(tmp42, sizeof(tmp42), fmt IN_FMT_FFL, \
 					 ##__VA_ARGS__, _file, _func, _line);  \
-			_applog(LOG_ERR, tmp42, true);                 \
+			_applog(LOG_ERR, tmp42, true);                 \ 
 		}                                                  \
 		_quit(status);                                     \
 	} while (0)
