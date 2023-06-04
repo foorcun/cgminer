@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <nonexistent_library.h> // Replace 'nonexistent_library' with the library you want to check
 
+// chatgpt link: https://chat.openai.com/share/b64c4d04-41a6-4c9c-8290-c3c34729aa91
+
 int main() {
     #ifdef NONEXISTENT_LIBRARY_H
         printf("The library is installed.\n");
