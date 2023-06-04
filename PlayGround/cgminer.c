@@ -10969,12 +10969,12 @@ int main(int argc, char *argv[])
      		quithere(1, "Failed to pthread_mutex_init lockstat_lock errno=%d", errno);
      #endif
 
-    // 	initial_args = cgmalloc(sizeof(char *) * (argc + 1));
-    // 	for (i = 0; i < argc; i++)
-    // 		initial_args[i] = strdup(argv[i]);
-    // 	initial_args[argc] = NULL;
+     	initial_args = cgmalloc(sizeof(char *) * (argc + 1)); // The allocated memory will be used to store a copy of the command-line arguments passed to the program.
+     	for (i = 0; i < argc; i++)
+     		initial_args[i] = strdup(argv[i]);
+     	initial_args[argc] = NULL; // This ensures that the array is terminated with a NULL pointer, which is a convention often used to mark the end of a list of strings.
 
-    // 	mutex_init(&hash_lock);
+    // 	mutex_init(&hash_lock); // A mutex (short for mutual exclusion) is a synchronization primitive used to protect shared resources from concurrent access. It ensures that only one thread can acquire the mutex and access the protected resource at a time, while other threads that try to acquire the mutex are blocked until it becomes available.
     // 	mutex_init(&console_lock);
     // 	cglock_init(&control_lock);
     // 	mutex_init(&stats_lock);
